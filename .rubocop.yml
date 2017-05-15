@@ -35,6 +35,12 @@ ExtraSpacing:
   Exclude:
     - 'config/routes.rb'
 
+Style/BlockLength:
+  Exclude:
+    - 'Rakefile'
+    - '**/*.rake'
+    - 'spec/**/*.rb'
+
 AllCops:
   Include:
     - '**/Rakefile'
