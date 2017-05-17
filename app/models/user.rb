@@ -11,4 +11,9 @@ class User < ApplicationRecord
   def full_name
     "#{first_name} #{last_name}"
   end
+
+  # Forgets a user.
+  def forget
+    # Remove token
+  end
 end

@@ -6,5 +6,9 @@ Rails.application.routes.draw do
   get   '/register',  to: 'registrations#new',    as: :registration
   post  '/register',  to: 'registrations#create', as: :registration_create
 
-  get 'users/:username', to: 'users#show', as: :users_show
+  get '/login',     to: 'sessions#new',       as: :login
+  post '/login',    to: 'sessions#create',    as: :login_create
+  delete 'logout',  to: 'sessions#destroy',   as: :logout
+
+  resources :users
 end
