@@ -48,5 +48,31 @@ RSpec.describe User, type: :model do
       user = FactoryGirl.create(:user)
       expect(user.full_name).to eq "#{user.first_name} #{user.last_name}"
     end
+
+    it '#remember creates new token' do
+      user = FactoryGirl.create(:user)
+      5.times do
+        user.remember
+      end
+      expect(user.user_remember_tokens.count).to eq 5
+    end
+
+    it '#forget_remember_token removes a token' do
+      user = FactoryGirl.create(:user)
+      user.remember
+      expect(user.user_remember_tokens.count).to eq 1
+      user.forget_remember_token(user.user_remember_tokens.first.remember_digest)
+      expect(user.user_remember_tokens.count).to eq 0
+    end
+
+    it '#forget_all_remember_tokens removes all tokens' do
+      user = FactoryGirl.create(:user)
+      5.times do
+        user.remember
+      end
+      expect(user.user_remember_tokens.count).to eq 5
+      user.forget_all_remember_tokens
+      expect(user.user_remember_tokens.count).to eq 0
+    end
   end
 end
