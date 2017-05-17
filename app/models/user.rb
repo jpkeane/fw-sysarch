@@ -8,12 +8,30 @@ class User < ApplicationRecord
                           uniqueness: { case_sensitive: false }
   has_secure_password
 
+  has_many :user_remember_tokens
+
+  class << self
+    # Returns a random token.
+    def new_token
+      SecureRandom.urlsafe_base64
+    end
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end
 
+  def remember
+    token = UserRememberToken.new(user: self, remember_digest: User.new_token)
+    self.user_remember_tokens << token
+  end
+
   # Forgets a user.
-  def forget
-    # Remove token
+  def forget_remember_token(token)
+    UserRememberToken.where(remember_digest: token, user: self).destroy_all
+  end
+
+  def forget_all_remember_tokens
+    UserRememberToken.where(user: self).destroy_all
   end
 end
