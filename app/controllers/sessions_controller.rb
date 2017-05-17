@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
 
     user = User.find_by(username: session[:username].downcase)
     if user && user.authenticate(session[:password])
-      successful_sign_in
+      successful_sign_in(user)
     else
       unsuccessful_sign_in
     end
@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
 
   private
 
-  def successful_sign_in
+  def successful_sign_in(user)
     log_in user
     flash[:success] = 'Log in successful'
     redirect_to user
