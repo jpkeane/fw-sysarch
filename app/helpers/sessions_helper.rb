@@ -16,14 +16,14 @@ module SessionsHelper
 
   # Forgets a persistent session.
   def forget(user)
-    user.forget
+    user.forget_remember_token(cookies[:remember_token])
     cookies.delete(:user_id)
     cookies.delete(:remember_token)
   end
 
   # Logs out the current user.
   def log_out
-    # forget(current_user)
+    forget(current_user)
     session.delete(:user_id)
     @current_user = nil
   end
