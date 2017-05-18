@@ -15,6 +15,13 @@ RSpec.feature 'User Login and Logout', type: :feature do
     expect(page).to have_content('You are already logged in')
   end
 
+  scenario 'User logs in with remembering' do
+    successful_sign_in(remember: true)
+    expect(Capybara.current_session.driver.request.cookies['remember_token']).not_to be_nil
+    successful_log_out
+    expect(Capybara.current_session.driver.request.cookies['remember_token']).to be_nil
+  end
+
   scenario 'User logs in unsuccessfully' do
     visit root_path
     click_link 'Log in'
@@ -31,13 +38,12 @@ RSpec.feature 'User Login and Logout', type: :feature do
     # expect(page).to have_content('You are not logged in')
   end
 
-  # def successful_sign_in(options = {})
-  def successful_sign_in
+  def successful_sign_in(options = {})
     visit root_path
     click_link 'Log in'
     fill_in 'Username', with: user.username
     fill_in 'Password', with: user.password
-    # check('session_remember_me') if options[:remember]
+    check('session_remember_me') if options[:remember]
     click_button 'Log in'
   end
 
