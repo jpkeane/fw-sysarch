@@ -24,6 +24,11 @@ class User < ApplicationRecord
   def remember
     token = UserRememberToken.new(user: self, remember_digest: User.new_token)
     self.user_remember_tokens << token
+    token.remember_digest
+  end
+
+  def remembered_by_token?(token)
+    UserRememberToken.find_by(user: self.id, remember_digest: token)
   end
 
   # Forgets a user.

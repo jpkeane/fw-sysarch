@@ -25,6 +25,7 @@ class SessionsController < ApplicationController
 
   def successful_sign_in(user)
     log_in user
+    remember(user) if params[:session][:remember_me] == '1'
     flash[:success] = 'Log in successful'
     redirect_to user
   end
