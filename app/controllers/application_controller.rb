@@ -8,9 +8,9 @@ class ApplicationController < ActionController::Base
 
   def logged_in_user
     return if logged_in?
-    # store_location
-    # flash[:error] = 'You are not logged in'
-    # redirect_to login_url
+    store_location
+    flash[:danger] = 'You are not logged in'
+    redirect_to login_url
   end
 
   def guest_user_only
