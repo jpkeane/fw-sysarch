@@ -16,9 +16,9 @@ class EmailAddress < ApplicationRecord
     self.update(primary: true)
   end
 
-  def send_welcome_email
-    RegistrationMailer.welcome_email(self).deliver_now
-  end
+  # def send_welcome_email
+  #  RegistrationMailer.welcome_email(self).deliver_now
+  # end
 
   private
 
