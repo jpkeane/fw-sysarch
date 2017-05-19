@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170517205816) do
+ActiveRecord::Schema.define(version: 20170519154515) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "email_addresses", force: :cascade do |t|
+    t.string "email_address"
+    t.bigint "user_id"
+    t.boolean "primary"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_email_addresses_on_user_id"
+  end
 
   create_table "user_remember_tokens", force: :cascade do |t|
     t.bigint "user_id"
@@ -32,5 +41,6 @@ ActiveRecord::Schema.define(version: 20170517205816) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "email_addresses", "users"
   add_foreign_key "user_remember_tokens", "users"
 end

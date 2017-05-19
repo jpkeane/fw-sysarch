@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :user_remember_tokens
+  has_many :email_addresses, inverse_of: :user
 
   class << self
     # Returns a random token.
