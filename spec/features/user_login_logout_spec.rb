@@ -38,6 +38,17 @@ RSpec.feature 'User Login and Logout', type: :feature do
     # expect(page).to have_content('You are not logged in')
   end
 
+  scenario 'User logs out from all devices' do
+    successful_sign_in(remember: true)
+    2.times do
+      user.remember
+    end
+    expect(user.user_remember_tokens.count).to eq 3
+    visit dashboard_path
+    click_link 'Log out from all computers'
+    expect(user.user_remember_tokens.count).to eq 0
+  end
+
   def successful_sign_in(options = {})
     visit root_path
     click_link 'Log in'
