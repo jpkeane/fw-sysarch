@@ -21,6 +21,12 @@ class SessionsController < ApplicationController
     redirect_to root_url
   end
 
+  def destroy_from_all
+    log_out_all if logged_in?
+    flash[:success] = 'Log out from all devices successful'
+    redirect_to root_url
+  end
+
   private
 
   def successful_sign_in(user)

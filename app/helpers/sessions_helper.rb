@@ -36,9 +36,23 @@ module SessionsHelper
     cookies.delete(:remember_token)
   end
 
+  # Forgets all peristent sessions.
+  def forget_all(user)
+    user.forget_all_remember_tokens
+    cookies.delete(:user_id)
+    cookies.delete(:remember_token)
+  end
+
   # Logs out the current user.
   def log_out
     forget(current_user)
+    session.delete(:user_id)
+    @current_user = nil
+  end
+
+  # Logs out all sessions for the current user.
+  def log_out_all
+    forget_all(current_user)
     session.delete(:user_id)
     @current_user = nil
   end
