@@ -11,6 +11,8 @@ class User < ApplicationRecord
   has_many :user_remember_tokens
   has_many :email_addresses, inverse_of: :user
 
+  accepts_nested_attributes_for :email_addresses
+
   class << self
     # Returns a random token.
     def new_token
