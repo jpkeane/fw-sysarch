@@ -6,8 +6,8 @@ class SessionsController < ApplicationController
 
   def create
     session = params[:session]
+    user = user_to_sign_in(session[:username])
 
-    user = User.find_by(username: session[:username].downcase)
     if user && user.authenticate(session[:password])
       successful_sign_in(user)
     else
@@ -28,6 +28,14 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  def user_to_sign_in(credential)
+    if /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i =~ credential
+      EmailAddress.find_by(email_address: credential).user
+    else
+      User.find_by(username: credential.downcase)
+    end
+  end
 
   def successful_sign_in(user)
     log_in user
