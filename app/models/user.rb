@@ -24,6 +24,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def primary_email
+    email_addresses.find_by(primary: true)
+  end
+
   def remember
     token = UserRememberToken.new(user: self, remember_digest: User.new_token)
     self.user_remember_tokens << token

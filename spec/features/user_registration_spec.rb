@@ -15,6 +15,7 @@ RSpec.feature 'User Registration', type: :feature do
     fill_in 'Password confirmation', with: user.password
     click_button 'Register'
     expect(page).to have_content('Account created successfully')
+    expect(ActionMailer::Base.deliveries.size).to eq 1
   end
 
   scenario 'User registers with invalid details' do
@@ -28,5 +29,6 @@ RSpec.feature 'User Registration', type: :feature do
     fill_in 'Password', with: user.password
     click_button 'Register'
     expect(page).to have_content('There was a problem with your registration')
+    expect(ActionMailer::Base.deliveries.size).to eq pre_deliveries
   end
 end

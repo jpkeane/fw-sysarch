@@ -37,6 +37,8 @@ group :development do
   gem 'brakeman'
   gem 'reek'
   gem 'rubocop'
+
+  gem 'letter_opener'
 end
 
 group :development, :test do
