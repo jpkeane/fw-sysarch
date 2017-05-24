@@ -11,6 +11,7 @@ RSpec.feature 'User Registration', type: :feature do
     fill_in 'First name', with: user.first_name
     fill_in 'Last name', with: user.last_name
     fill_in 'Email address', with: email_address.email_address
+    fill_in 'Location', with: user.location
     fill_in 'Password', with: user.password
     fill_in 'Password confirmation', with: user.password
     click_button 'Register'

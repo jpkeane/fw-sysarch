@@ -6,6 +6,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_attribute :last_name }
     it { is_expected.to have_attribute :username }
     it { is_expected.to have_attribute :password_digest }
+    it { is_expected.to have_attribute :location }
 
     it { is_expected.to respond_to :password }
     it { is_expected.to respond_to :password_confirmation }
@@ -22,6 +23,8 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_presence_of :last_name }
     it { is_expected.to validate_presence_of :username }
     it { is_expected.to validate_presence_of :password }
+
+    it { is_expected.not_to validate_presence_of :location }
 
     it 'validates uniqueness of usernames' do
       subject { FactoryGirl.create(:user) }

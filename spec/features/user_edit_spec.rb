@@ -14,10 +14,12 @@ RSpec.feature 'User Ecit', type: :feature do
     expect(user.last_name).to eq 'NewLastName'
   end
 
-  scenario 'User logs in and edits name unsuccessfully' do
+  scenario 'User logs in and edits profile unsuccessfully' do
+    new_location = Faker::Address.city
     successful_sign_in
     click_link 'Edit Profile'
     fill_in 'Last name', with: ''
+    fill_in 'Location', with: new_location
     click_button 'Update Profile'
     expect(page).to have_content("Last name can't be blank")
     old_last_name = user.last_name
