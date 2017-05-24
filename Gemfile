@@ -17,6 +17,8 @@ gem 'puma', '~> 3.7'
 
 # Core
 gem 'bcrypt', '~> 3.1.7'
+gem 'friendly_id'
+gem 'pundit'
 
 # View
 gem 'bootstrap-sass', '3.3.6'

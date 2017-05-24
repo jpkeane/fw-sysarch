@@ -1,6 +1,7 @@
 class RegistrationsController < ApplicationController
   skip_before_action :logged_in_user,  only: %i[new create]
   before_action      :guest_user_only, only: %i[new create]
+  skip_after_action  :verify_authorized
 
   def new
     @user = User.new

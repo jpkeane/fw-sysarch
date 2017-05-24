@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   delete 'logout',                to: 'sessions#destroy',             as: :logout
   delete 'logout_all_sessions',   to: 'sessions#destroy_from_all',    as: :logout_all
 
-  resources :users
+  get '/users/:username', to: 'users#show', as: :users_show
+  get '/users/:username/edit', to: 'users#edit', as: :users_edit
+  patch '/users/:username/update', to: 'users#update', as: :users_update
 
   get 'dashboard', to: 'dashboards#show', as: :dashboard
 end
