@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  VALID_USERNAME_REGEX = /\A[a-zA-Z0-9\_\-\.]+\z/
+  VALID_USERNAME_REGEX = /\A[a-zA-Z0-9\_\-]+\z/
 
   validates :first_name,  presence: true
   validates :last_name,   presence: true

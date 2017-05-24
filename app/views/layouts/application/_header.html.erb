@@ -4,6 +4,7 @@
     <nav>
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
+            <li><%= link_to 'Edit Profile', users_edit_path(username: current_user.username) %></li>
             <li><%= link_to 'Log out', logout_path, method: :delete %></li>
             <li><%= link_to 'Log out from all computers', logout_all_path, method: :delete %></li>
         <% else %>
