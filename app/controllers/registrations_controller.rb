@@ -12,7 +12,8 @@ class RegistrationsController < ApplicationController
     if @user.save
       RegistrationMailer.welcome_email(@user.primary_email).deliver_now
       flash[:info] = 'Account created successfully'
-      redirect_to root_url
+      log_in @user
+      redirect_to dashboard_url
     else
       flash.now[:warning] = 'There was a problem with your registration'
       render 'new'
