@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe DashboardsController, type: :controller do
+  let!(:user) { FactoryGirl.create(:user) }
+
   context 'not signed in' do
     describe 'GET #show' do
       it 'returns http found to login page' do
@@ -13,7 +15,6 @@ RSpec.describe DashboardsController, type: :controller do
   context 'signed in' do
     describe 'GET #show' do
       it 'returns http success' do
-        user = FactoryGirl.create(:user)
         request.session[:user_id] = user.id
         get :show
         expect(response).to have_http_status(:success)
@@ -24,7 +25,6 @@ RSpec.describe DashboardsController, type: :controller do
   context 'remembered' do
     describe 'GET #show' do
       it 'returns http success' do
-        user = FactoryGirl.create(:user)
         token = user.remember
         cookies.signed[:user_id] = user.id
         cookies[:remember_token] = token
