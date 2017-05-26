@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'User Ecit', type: :feature do
+RSpec.feature 'User Edit', type: :feature do
   let(:user) { FactoryGirl.create(:user, password: 'testpassword') }
   let(:email) { FactoryGirl.create(:email_address, user: user) }
 
