@@ -4,6 +4,10 @@ RSpec.feature 'User Registration', type: :feature do
   let(:user) { FactoryGirl.build(:user, password: 'testpassword') }
   let(:email_address) { FactoryGirl.build(:email_address, user: user) }
 
+  before(:each) do
+    ActionMailer::Base.deliveries = []
+  end
+
   scenario 'User registers with valid details' do
     visit root_path
     click_link 'Register'

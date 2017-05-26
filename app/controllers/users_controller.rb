@@ -51,6 +51,7 @@ class UsersController < ApplicationController
       @user.errors.add(:password, 'must be entered')
       render 'change_password'
     elsif @user.update_attributes(user_update_password_params)
+      UserMailer.changed_password_email(@user.primary_email).deliver_now
       flash[:success] = 'Password changed'
       redirect_to users_show_path(username: @user.username)
     else
