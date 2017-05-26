@@ -1,5 +1,4 @@
-@import "bootstrap-sprockets";
-@import "bootstrap";
+
 
 /* mixins, variables, etc. */
 
@@ -53,6 +52,14 @@ h2 {
   text-align: center;
   font-weight: normal;
   color: #777;
+}
+
+h2.subheader {
+  font-size: 1.6em;
+  margin-bottom: 20px;
+  text-align: left;
+  padding-bottom: 10px;
+  border-bottom: 1px #e1e4e8 solid;
 }
 
 p {

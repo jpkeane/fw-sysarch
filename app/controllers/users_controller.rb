@@ -20,9 +20,41 @@ class UsersController < ApplicationController
     end
   end
 
+  def change_password
+    @user = User.find_by(username: params[:username])
+    authorize @user
+  end
+
+  def update_password
+    @user = User.find_by(username: params[:username])
+    authorize @user
+    if @user.authenticate(params[:user][:current_password])
+      correct_user_password_change
+    else
+      @user.errors.add(:current_password, 'is incorrect')
+      render 'change_password'
+    end
+  end
+
   private
 
   def user_update_params
     params.require(:user).permit(:first_name, :last_name, :location)
+  end
+
+  def user_update_password_params
+    params.require(:user).permit(:password, :password_confirmation)
+  end
+
+  def correct_user_password_change
+    if params[:user][:password].blank?
+      @user.errors.add(:password, 'must be entered')
+      render 'change_password'
+    elsif @user.update_attributes(user_update_password_params)
+      flash[:success] = 'Password changed'
+      redirect_to users_show_path(username: @user.username)
+    else
+      render 'change_password'
+    end
   end
 end

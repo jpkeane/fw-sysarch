@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   get '/users/:username', to: 'users#show', as: :users_show
   get '/users/:username/edit', to: 'users#edit', as: :users_edit
   patch '/users/:username/update', to: 'users#update', as: :users_update
+  get '/users/:username/change_password', to: 'users#change_password', as: :users_change_password
+  patch '/users/:username/change_password', to: 'users#update_password', as: :users_update_password
 
   get 'dashboard', to: 'dashboards#show', as: :dashboard
 end

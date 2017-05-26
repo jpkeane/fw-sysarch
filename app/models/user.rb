@@ -7,6 +7,7 @@ class User < ApplicationRecord
                           format: { with: VALID_USERNAME_REGEX },
                           uniqueness: { case_sensitive: false }
   has_secure_password
+  validates :password, presence: true, length: { minimum: 8 }, allow_nil: true
 
   has_many :user_remember_tokens
   has_many :email_addresses, inverse_of: :user
