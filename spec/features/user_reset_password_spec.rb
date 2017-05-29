@@ -58,6 +58,13 @@ RSpec.feature 'User Reset Password', type: :feature do
 
   scenario 'User unsuccessfully resets password with non matching passwords' do
     submit_valid_token
+    fill_in_password_form('2short', '2short')
+    expect(page).to have_content 'Password is too short'
+    expect(ActionMailer::Base.deliveries.size).to eq 1
+  end
+
+  scenario 'User unsuccessfully resets password with non matching passwords' do
+    submit_valid_token
     fill_in_password_form('testpassword', 'testpassword2')
     expect(page).to have_content 'Password confirmation doesn\'t match Password'
     expect(ActionMailer::Base.deliveries.size).to eq 1
