@@ -9,7 +9,7 @@ class PasswordResetsController < ApplicationController
     @user = user_to_recover(params[:password_reset][:username].downcase)
     if @user
       @user.create_password_reset_token
-      UserMailer.password_reset_email(@user).deliver_now
+      UserMailer.password_reset_email(@user).deliver_later
       flash[:info] = 'Email sent with password reset instructions to your primary email address'
       redirect_to root_url
     else
@@ -58,7 +58,7 @@ class PasswordResetsController < ApplicationController
 
   def valid_password_change
     @user.forget_all_remember_tokens
-    UserMailer.password_reset_successful_email(@user).deliver_now
+    UserMailer.password_reset_successful_email(@user).deliver_later
     flash[:success] = 'Password changed'
     redirect_to root_path
   end

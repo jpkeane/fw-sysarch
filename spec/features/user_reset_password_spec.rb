@@ -11,19 +11,19 @@ RSpec.feature 'User Reset Password', type: :feature do
   scenario 'User requests reset to correct username' do
     fill_in_reset_form(user.username)
     expect(page).to have_content('Email sent with password reset instructions')
-    expect(ActionMailer::Base.deliveries.size).to eq 1
+    expect(Sidekiq::Worker.jobs.size).to eq 1
   end
 
   scenario 'User requests reset to correct email' do
     fill_in_reset_form(user.primary_email.email_address)
     expect(page).to have_content('Email sent with password reset instructions')
-    expect(ActionMailer::Base.deliveries.size).to eq 1
+    expect(Sidekiq::Worker.jobs.size).to eq 1
   end
 
   scenario 'User requests reset to incorrect username' do
     fill_in_reset_form('notacredential')
     expect(page).to have_content('Incorrect details entered')
-    expect(ActionMailer::Base.deliveries.size).to eq 0
+    expect(Sidekiq::Worker.jobs.size).to eq 0
   end
 
   scenario 'User submits valid token' do
@@ -42,7 +42,7 @@ RSpec.feature 'User Reset Password', type: :feature do
     submit_valid_token
     fill_in_password_form('testpassword', 'testpassword')
     expect(page).to have_content 'Password changed'
-    expect(ActionMailer::Base.deliveries.size).to eq 2
+    expect(Sidekiq::Worker.jobs.size).to eq 2
   end
 
   scenario 'User successfully resets password and remember tokens removed' do
@@ -53,28 +53,28 @@ RSpec.feature 'User Reset Password', type: :feature do
     fill_in_password_form('testpassword', 'testpassword')
     expect(page).to have_content 'Password changed'
     user.reload
-    expect(user.user_remember_tokens.count).to eq 0
+    expect(Sidekiq::Worker.jobs.size).to eq 2
   end
 
   scenario 'User unsuccessfully resets password with non matching passwords' do
     submit_valid_token
     fill_in_password_form('2short', '2short')
     expect(page).to have_content 'Password is too short'
-    expect(ActionMailer::Base.deliveries.size).to eq 1
+    expect(Sidekiq::Worker.jobs.size).to eq 1
   end
 
   scenario 'User unsuccessfully resets password with non matching passwords' do
     submit_valid_token
     fill_in_password_form('testpassword', 'testpassword2')
     expect(page).to have_content 'Password confirmation doesn\'t match Password'
-    expect(ActionMailer::Base.deliveries.size).to eq 1
+    expect(Sidekiq::Worker.jobs.size).to eq 1
   end
 
   scenario 'User unsuccessfully resets password with blank password' do
     submit_valid_token
     fill_in_password_form('', '')
     expect(page).to have_content 'Password must be entered'
-    expect(ActionMailer::Base.deliveries.size).to eq 1
+    expect(Sidekiq::Worker.jobs.size).to eq 1
   end
 
   scenario 'User successfully changes password from direct link' do
@@ -83,7 +83,7 @@ RSpec.feature 'User Reset Password', type: :feature do
     visit password_reset_token_from_email_path(token: user.password_reset_token)
     fill_in_password_form('testpassword', 'testpassword')
     expect(page).to have_content 'Password changed'
-    expect(ActionMailer::Base.deliveries.size).to eq 2
+    expect(Sidekiq::Worker.jobs.size).to eq 2
   end
 
   private

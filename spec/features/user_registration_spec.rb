@@ -4,10 +4,6 @@ RSpec.feature 'User Registration', type: :feature do
   let(:user) { FactoryGirl.build(:user, password: 'testpassword') }
   let(:email_address) { FactoryGirl.build(:email_address, user: user) }
 
-  before(:each) do
-    ActionMailer::Base.deliveries = []
-  end
-
   scenario 'User registers with valid details' do
     visit root_path
     click_link 'Register'
@@ -24,7 +20,6 @@ RSpec.feature 'User Registration', type: :feature do
   end
 
   scenario 'User registers with invalid details' do
-    pre_jobs = Sidekiq::Worker.jobs.size
     visit root_path
     click_link 'Register'
     fill_in 'Username', with: user.username
@@ -34,6 +29,6 @@ RSpec.feature 'User Registration', type: :feature do
     fill_in 'Password', with: user.password
     click_button 'Register'
     expect(page).to have_content('There was a problem with your registration')
-    expect(Sidekiq::Worker.jobs.size).to eq pre_jobs
+    expect(Sidekiq::Worker.jobs.size).to eq 0
   end
 end
