@@ -65,7 +65,7 @@ RSpec.feature 'User Reset Password', type: :feature do
     visit root_path
     click_link 'Log in'
     click_link 'Forgot Password?'
-    fill_in 'Username', with: credential
+    fill_in 'Username or Password', with: credential
     click_button 'Request Password Reset'
   end
 
