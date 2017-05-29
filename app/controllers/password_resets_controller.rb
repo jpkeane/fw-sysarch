@@ -23,15 +23,11 @@ class PasswordResetsController < ApplicationController
   end
 
   def submit_token
-    @user = User.find_by(password_reset_token: params[:user][:password_reset_token])
-    if @user
-      flash.now[:info] = 'Token valid'
-      render 'reset_password'
-    else
-      flash.now[:danger] = 'Token not found'
-      @user = User.new
-      render 'enter_token'
-    end
+    validate_token(password_reset_token: params[:user][:password_reset_token])
+  end
+
+  def submit_token_from_email
+    validate_token(password_reset_token: params[:token])
   end
 
   def reset_password
@@ -47,6 +43,18 @@ class PasswordResetsController < ApplicationController
   end
 
   private
+
+  def validate_token(token)
+    @user = User.find_by(token)
+    if @user
+      flash.now[:info] = 'Token valid'
+      render 'reset_password'
+    else
+      flash.now[:danger] = 'Token not found'
+      @user = User.new
+      render 'enter_token'
+    end
+  end
 
   def valid_password_change
     @user.forget_all_remember_tokens

@@ -77,6 +77,15 @@ RSpec.feature 'User Reset Password', type: :feature do
     expect(ActionMailer::Base.deliveries.size).to eq 1
   end
 
+  scenario 'User successfully changes password from direct link' do
+    fill_in_reset_form(user.username)
+    user.reload
+    visit password_reset_token_from_email_path(token: user.password_reset_token)
+    fill_in_password_form('testpassword', 'testpassword')
+    expect(page).to have_content 'Password changed'
+    expect(ActionMailer::Base.deliveries.size).to eq 2
+  end
+
   private
 
   def fill_in_reset_form(credential)
