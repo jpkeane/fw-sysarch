@@ -43,12 +43,21 @@ RSpec.feature 'User Reset Password', type: :feature do
     expect(ActionMailer::Base.deliveries.size).to eq 2
   end
 
-  scenario 'User unsuccessfully resets password' do
+  scenario 'User unsuccessfully resets password with non matching passwords' do
     submit_valid_token
     fill_in 'Password', with: 'newpassword1'
     fill_in 'Confirmation', with: 'newpassword2'
     click_button 'Update password'
     expect(page).to have_content 'Password confirmation doesn\'t match Password'
+    expect(ActionMailer::Base.deliveries.size).to eq 1
+  end
+
+  scenario 'User unsuccessfully resets password with blank password' do
+    submit_valid_token
+    fill_in 'Password', with: ''
+    fill_in 'Confirmation', with: ''
+    click_button 'Update password'
+    expect(page).to have_content 'Password must be entered'
     expect(ActionMailer::Base.deliveries.size).to eq 1
   end
 
