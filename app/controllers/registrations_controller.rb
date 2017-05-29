@@ -11,7 +11,7 @@ class RegistrationsController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      RegistrationMailer.welcome_email(@user.primary_email).deliver_now
+      RegistrationMailer.welcome_email(@user.primary_email).deliver_later
       flash[:info] = 'Account created successfully'
       log_in @user
       redirect_to dashboard_url

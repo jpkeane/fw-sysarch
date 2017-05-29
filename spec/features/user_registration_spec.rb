@@ -20,11 +20,11 @@ RSpec.feature 'User Registration', type: :feature do
     fill_in 'Password confirmation', with: user.password
     click_button 'Register'
     expect(page).to have_content('Account created successfully')
-    expect(ActionMailer::Base.deliveries.size).to eq 1
+    expect(Sidekiq::Worker.jobs.size).to eq 1
   end
 
   scenario 'User registers with invalid details' do
-    pre_deliveries = ActionMailer::Base.deliveries.size
+    pre_jobs = Sidekiq::Worker.jobs.size
     visit root_path
     click_link 'Register'
     fill_in 'Username', with: user.username
@@ -34,6 +34,6 @@ RSpec.feature 'User Registration', type: :feature do
     fill_in 'Password', with: user.password
     click_button 'Register'
     expect(page).to have_content('There was a problem with your registration')
-    expect(ActionMailer::Base.deliveries.size).to eq pre_deliveries
+    expect(Sidekiq::Worker.jobs.size).to eq pre_jobs
   end
 end

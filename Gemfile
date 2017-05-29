@@ -15,6 +15,9 @@ gem 'redis', '~> 3.0'
 # App servers
 gem 'puma', '~> 3.7'
 
+# Job workers
+gem 'sidekiq'
+
 # Core
 gem 'bcrypt', '~> 3.1.7'
 gem 'friendly_id'
