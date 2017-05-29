@@ -77,5 +77,12 @@ RSpec.describe User, type: :model do
       user.forget_all_remember_tokens
       expect(user.user_remember_tokens.count).to eq 0
     end
+
+    it '#create_password_reset_token creates password reset token' do
+      user = FactoryGirl.create(:user)
+      user.create_password_reset_token
+      expect(user.password_reset_token).not_to be_blank
+      expect(user.password_reset_token_at).to be_within(2.seconds).of Time.zone.now
+    end
   end
 end
