@@ -49,6 +49,7 @@ class PasswordResetsController < ApplicationController
   private
 
   def valid_password_change
+    @user.forget_all_remember_tokens
     UserMailer.password_reset_successful_email(@user).deliver_now
     flash[:success] = 'Password changed'
     redirect_to root_path

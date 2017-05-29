@@ -45,6 +45,17 @@ RSpec.feature 'User Reset Password', type: :feature do
     expect(ActionMailer::Base.deliveries.size).to eq 2
   end
 
+  scenario 'User successfully resets password and remember tokens removed' do
+    3.times do
+      user.remember
+    end
+    submit_valid_token
+    fill_in_password_form('testpassword', 'testpassword')
+    expect(page).to have_content 'Password changed'
+    user.reload
+    expect(user.user_remember_tokens.count).to eq 0
+  end
+
   scenario 'User unsuccessfully resets password with non matching passwords' do
     submit_valid_token
     fill_in_password_form('testpassword', 'testpassword2')
