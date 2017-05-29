@@ -28,35 +28,27 @@ RSpec.feature 'User Reset Password', type: :feature do
   scenario 'User submits invalid token' do
     fill_in_reset_form(user.username)
     visit password_reset_token_path
-    user.reload
-    fill_in 'Password reset token', with: 'notatoken'
-    click_button 'Submit Token'
+    fill_in_token_form('notthetoken')
     expect(page).to have_content 'Token not found'
   end
 
   scenario 'User successfully resets password' do
     submit_valid_token
-    fill_in 'Password', with: 'newpassword1'
-    fill_in 'Confirmation', with: 'newpassword1'
-    click_button 'Update password'
+    fill_in_password_form('testpassword', 'testpassword')
     expect(page).to have_content 'Password changed'
     expect(ActionMailer::Base.deliveries.size).to eq 2
   end
 
   scenario 'User unsuccessfully resets password with non matching passwords' do
     submit_valid_token
-    fill_in 'Password', with: 'newpassword1'
-    fill_in 'Confirmation', with: 'newpassword2'
-    click_button 'Update password'
+    fill_in_password_form('testpassword', 'testpassword2')
     expect(page).to have_content 'Password confirmation doesn\'t match Password'
     expect(ActionMailer::Base.deliveries.size).to eq 1
   end
 
   scenario 'User unsuccessfully resets password with blank password' do
     submit_valid_token
-    fill_in 'Password', with: ''
-    fill_in 'Confirmation', with: ''
-    click_button 'Update password'
+    fill_in_password_form('', '')
     expect(page).to have_content 'Password must be entered'
     expect(ActionMailer::Base.deliveries.size).to eq 1
   end
@@ -71,11 +63,21 @@ RSpec.feature 'User Reset Password', type: :feature do
     click_button 'Request Password Reset'
   end
 
+  def fill_in_token_form(token)
+    fill_in 'Password reset token', with: token
+    click_button 'Submit Token'
+  end
+
+  def fill_in_password_form(password, password_confirmation)
+    fill_in 'Password', with: password
+    fill_in 'Confirmation', with: password_confirmation
+    click_button 'Update password'
+  end
+
   def submit_valid_token
     fill_in_reset_form(user.username)
     visit password_reset_token_path
     user.reload
-    fill_in 'Password reset token', with: user.password_reset_token
-    click_button 'Submit Token'
+    fill_in_token_form(user.password_reset_token)
   end
 end
