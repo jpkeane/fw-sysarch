@@ -1,0 +1,15 @@
+<% provide(:title, 'Reset password') %>
+<h1>Password reset</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(@user, url: password_reset_token_path) do |f| %>
+        <%= render 'shared/error_messages', object: f.object %>
+
+        <%= f.label :password_reset_token %>
+        <%= f.text_field :password_reset_token, class: 'form-control' %>
+
+        <%= f.submit 'Submit Token', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

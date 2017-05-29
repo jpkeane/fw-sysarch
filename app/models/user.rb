@@ -47,4 +47,8 @@ class User < ApplicationRecord
   def forget_all_remember_tokens
     UserRememberToken.where(user: self).destroy_all
   end
+
+  def create_password_reset_token
+    update_attributes(password_reset_token: SecureRandom.urlsafe_base64, password_reset_token_at: Time.zone.now)
+  end
 end

@@ -11,6 +11,13 @@ Rails.application.routes.draw do
   delete 'logout',                to: 'sessions#destroy',             as: :logout
   delete 'logout_all_sessions',   to: 'sessions#destroy_from_all',    as: :logout_all
 
+  # resources :password_resets,     only: [:new, :create, :edit, :update]
+  get   'password_reset',     to: 'password_resets#new',            as: :password_reset
+  post  'password_reset',     to: 'password_resets#create'
+  get   'reset_token',        to: 'password_resets#enter_token',           as: :password_reset_token
+  post  'reset_token',        to: 'password_resets#submit_token'
+  patch 'password_reset',     to: 'password_resets#reset_password'
+
   get '/users/:username', to: 'users#show', as: :users_show
   get '/users/:username/edit', to: 'users#edit', as: :users_edit
   patch '/users/:username/update', to: 'users#update', as: :users_update
