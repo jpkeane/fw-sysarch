@@ -6,11 +6,11 @@ class PasswordResetsController < ApplicationController
   def new; end
 
   def create
-    @user = User.find_by(username: params[:password_reset][:username].downcase)
+    @user = user_to_recover(params[:password_reset][:username].downcase)
     if @user
       @user.create_password_reset_token
       UserMailer.password_reset_email(@user).deliver_now
-      flash[:info] = 'Email sent with password reset instructions'
+      flash[:info] = 'Email sent with password reset instructions to your primary email address'
       redirect_to root_url
     else
       flash.now[:danger] = 'Incorrect details entered'
@@ -56,5 +56,13 @@ class PasswordResetsController < ApplicationController
 
   def user_update_password_params
     params.require(:user).permit(:password, :password_confirmation)
+  end
+
+  def user_to_recover(credential)
+    if /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i =~ credential
+      EmailAddress.find_by(email_address: credential).user
+    else
+      User.find_by(username: credential.downcase)
+    end
   end
 end

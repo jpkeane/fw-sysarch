@@ -14,6 +14,12 @@ RSpec.feature 'User Reset Password', type: :feature do
     expect(ActionMailer::Base.deliveries.size).to eq 1
   end
 
+  scenario 'User requests reset to correct email' do
+    fill_in_reset_form(user.primary_email.email_address)
+    expect(page).to have_content('Email sent with password reset instructions')
+    expect(ActionMailer::Base.deliveries.size).to eq 1
+  end
+
   scenario 'User requests reset to incorrect username' do
     fill_in_reset_form('notacredential')
     expect(page).to have_content('Incorrect details entered')
